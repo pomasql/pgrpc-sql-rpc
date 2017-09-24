@@ -25,20 +25,20 @@ export
 
 all: help
 
-create: $(CREATE_OBJECTS)
+create: build-dir $(CREATE_OBJECTS)
 create: SOURCES=$(CREATE_OBJECTS)
 create: make-${TOOL}
 
-update: $(MAKE_OBJECTS)
+update: build-dir $(MAKE_OBJECTS)
 update: SOURCES=$(MAKE_OBJECTS)
 update: make-${TOOL}
 
-test: $(TEST_OBJECTS)
+test: build-dir $(TEST_OBJECTS)
 test: SOURCES = $(TEST_OBJECTS)
 test: make-${TOOL}
 
 ## Drop database schema
-drop: $(DROP_OBJECTS)
+drop: build-dir $(DROP_OBJECTS)
 drop: SOURCES=$(DROP_OBJECTS)
 drop: make-${TOOL}
 
@@ -91,14 +91,14 @@ build-dir:
 
 # Load sql via running docker container
 # cat used because running docker container has no access to our files
-make-docker: docker-wait build-dir
+make-docker: docker-wait
 	@docker exec -i $$PG_CONTAINER mkdir -p /var/sql/build
 	@docker cp *.md $$PG_CONTAINER:/var/sql/
 	@ls -1 $(SOURCES) | xargs -n 1 cat | docker exec -i $$PG_CONTAINER bash -c "cd /var/sql && psql -U $$DB_USER \
 	  -X -1 -v ON_ERROR_STOP=1 -v SCH=$$SCHEMA -v USER_PASS=$$ADMIN_USER_PASS"
 
 # Load sql via local psql
-make-psql: build-dir
+make-psql:
 	@ls -1 $(SOURCES) | xargs -n 1 echo "\i" \
 	  | psql -d "postgres://$$DB_USER:$$DB_PASS@$$DB_ADDR/$$DB_NAME?sslmode=disable" \
 	    -X -1 -v ON_ERROR_STOP=1 -v SCH=$$SCHEMA -v USER_PASS=$$ADMIN_USER_PASS
