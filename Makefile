@@ -91,11 +91,14 @@ build-dir:
 
 # Load sql via running docker container
 # cat used because running docker container has no access to our files
-make-docker: docker-wait
-	@docker exec -i $$PG_CONTAINER mkdir -p /var/sql/build
-	@docker cp *.md $$PG_CONTAINER:/var/sql/
-	@ls -1 $(SOURCES) | xargs -n 1 cat | docker exec -i $$PG_CONTAINER bash -c "cd /var/sql && psql -U $$DB_USER \
-	  -X -1 -v ON_ERROR_STOP=1 -v SCH=$$SCHEMA -v USER_PASS=$$ADMIN_USER_PASS"
+make-docker: docker-wait deps
+	tmp_dir=$(shell mktemp -u) ; \
+	docker exec -i $$PG_CONTAINER mkdir -p $$tmp_dir/build ; \
+	echo "Temp dir: $$tmp_dir" ; \
+	docker cp . $$PG_CONTAINER:$$tmp_dir ; \
+	ls -1 $(SOURCES) | xargs -n 1 cat | docker exec -i $$PG_CONTAINER bash -c "cd $$tmp_dir && psql -U $$DB_USER \
+	  -X -1 -v ON_ERROR_STOP=1 -v SCH=$$SCHEMA -v USER_PASS=$$ADMIN_USER_PASS" ; \
+	docker exec -i $$PG_CONTAINER rm -rf $$tmp_dir
 
 # Load sql via local psql
 make-psql:
