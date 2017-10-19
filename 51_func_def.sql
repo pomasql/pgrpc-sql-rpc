@@ -19,7 +19,7 @@ COMMENT ON FUNCTION pg_func_is_ro(TEXT, TEXT) IS 'Function is read-only (not vol
 
 -- -----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION pg_func_args(a_nspname TEXT, a_proname TEXT) 
+CREATE OR REPLACE FUNCTION pg_func_args(a_nspname TEXT, a_proname TEXT)
   RETURNS TABLE(arg TEXT, type TEXT, id INT, required BOOL, def_val TEXT) STABLE LANGUAGE 'plpgsql' AS
 $_$
   -- a_code:  название функции
@@ -99,7 +99,7 @@ $_$
     v_defs       TEXT[];
     v_i          INTEGER;
   BEGIN
-    SELECT INTO v_is_set, v_ret 
+    SELECT INTO v_is_set, v_ret
       p.proretset, pg_get_function_result(p.oid)
       FROM pg_catalog.pg_proc p
       JOIN pg_namespace n ON (n.oid = p.pronamespace)
