@@ -1,14 +1,14 @@
 SHELL           = /bin/bash
-AWK            ?= $(shell command -v awk 2> /dev/null)
+AWK            ?= $(shell command -v gawk 2> /dev/null)
 CFG            ?= .env
 
 CREATE_SOURCES ?= $(wildcard [1-9]?_*.sql)
 TEST_SOURCES   ?= $(wildcard 14_*.sql 9?_*.sql)
-MAKE_SOURCES   ?= $(wildcard 1[4,8,9]_*.sql [3-6]?_*.sql 9?_*.sql)
+UPDATE_SOURCES ?= $(wildcard 1[4-9]_*.sql [3-6]?_*.sql 9?_*.sql)
 DROP_SOURCES   ?= $(wildcard 0?_*.sql)
 CREATE_OBJECTS ?= $(addprefix build/,$(CREATE_SOURCES))
 TEST_OBJECTS   ?= $(addprefix build/,$(TEST_SOURCES))
-MAKE_OBJECTS   ?= $(addprefix build/,$(MAKE_SOURCES))
+UPDATE_OBJECTS   ?= $(addprefix build/,$(UPDATE_SOURCES))
 DROP_OBJECTS   ?= $(addprefix build/,$(DROP_SOURCES))
 
 PG_CONTAINER   ?= dcape_db_1
@@ -19,7 +19,7 @@ TOOL           ?= psql
 -include $(CFG)
 export
 
-.PHONY: help build-docker build-psql clean-docker clean-psql xx
+.PHONY: help build-docker build-psql clean-docker clean-psql docs METHODS.md
 
 # ------------------------------------------------------------------------------
 
@@ -29,8 +29,8 @@ create: build-dir $(CREATE_OBJECTS)
 create: SOURCES=$(CREATE_OBJECTS)
 create: make-${TOOL}
 
-update: build-dir $(MAKE_OBJECTS)
-update: SOURCES=$(MAKE_OBJECTS)
+update: build-dir $(UPDATE_OBJECTS)
+update: SOURCES=$(UPDATE_OBJECTS)
 update: make-${TOOL}
 
 test: build-dir $(TEST_OBJECTS)
@@ -52,16 +52,17 @@ clean:
 
 deps:
 ifndef AWK
-    $(error "awk is not available, please install it")
+    $(error "gawk is not available, please install it")
 endif
 	@echo "$(AWK) found."
 
 # ------------------------------------------------------------------------------
 
-doc: METHODS.md
+docs: METHODS.md
 
+# doc_gen.sh from https://github.com/LeKovr/apitools
 METHODS.md:
-	@bash doc_gen.sh $$SCHEMA > $@
+	@CONFIG=$(CFG) bash doc_gen.sh $$SCHEMA > $@
 
 # ------------------------------------------------------------------------------
 # sql file preprocessor performs the following tasks:
