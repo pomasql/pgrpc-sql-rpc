@@ -4,5 +4,5 @@
 */
 
 \set QUIET on
-SET SEARCH_PATH = :SCH, 'public';
+SET SEARCH_PATH = :PKG, 'public';
 \set QUIET off

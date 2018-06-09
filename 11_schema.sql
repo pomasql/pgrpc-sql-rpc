@@ -4,7 +4,7 @@
 */
 
 -- Вывод в логи информации о коннекте
-\qecho 'Database: ':HOST':':PORT'@':DBNAME
+\conninfo
 
 -- Создание схемы
-CREATE SCHEMA IF NOT EXISTS :SCH;
+CREATE SCHEMA IF NOT EXISTS :PKG;

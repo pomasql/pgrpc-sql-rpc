@@ -1,8 +1,8 @@
-#  90_test
-## index
+#  rpc/90_test
+## rpc/90_test
 
 ```sql
-SELECT * FROM index('rpc')
+SELECT * FROM rpc.index('rpc')
 ;
 ```
 |   code     | nspname |   proname   | max_age |             anno              |         sample          | is_ro 
@@ -11,7 +11,7 @@ SELECT * FROM index('rpc')
 |func_result | rpc     | func_result |       0 | Описание результата процедуры | {"a_code": "func_args"} | t
 |index       | rpc     | index       |       0 | Список описаний процедур      | {}                      | t
 
-## func_args
+## rpc/90_test
 
 ```sql
 SELECT * FROM rpc.func_args('func_args')
@@ -21,7 +21,7 @@ SELECT * FROM rpc.func_args('func_args')
 |-------|------|----------|---------|---------------
 |a_code | text | t        |         | Имя процедуры
 
-## func_result
+## rpc/90_test
 
 ```sql
 SELECT * FROM rpc.func_result('func_args')
