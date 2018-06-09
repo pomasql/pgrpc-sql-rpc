@@ -2,6 +2,9 @@
 ## rpc/90_test
 
 ```sql
+/*
+  Тест index
+*/
 SELECT * FROM rpc.index('rpc')
 ;
 ```
@@ -14,6 +17,9 @@ SELECT * FROM rpc.index('rpc')
 ## rpc/90_test
 
 ```sql
+/*
+  Тест func_args
+*/
 SELECT * FROM rpc.func_args('func_args')
 ;
 ```
@@ -24,6 +30,9 @@ SELECT * FROM rpc.func_args('func_args')
 ## rpc/90_test
 
 ```sql
+/*
+  Тест func_result
+*/
 SELECT * FROM rpc.func_result('func_args')
 ;
 ```
