@@ -8,11 +8,11 @@
 SELECT * FROM rpc.index('rpc')
 ;
 ```
-|   code     | nspname |   proname   | max_age |             anno              |         sample          | is_ro 
-|------------|---------|-------------|---------|-------------------------------|-------------------------|-------
-|func_args   | rpc     | func_args   |       0 | Описание аргументов процедуры | {"a_code": "func_args"} | t
-|func_result | rpc     | func_result |       0 | Описание результата процедуры | {"a_code": "func_args"} | t
-|index       | rpc     | index       |       0 | Список описаний процедур      | {}                      | t
+|   code     | nspname |   proname   |             anno              |         sample          | is_set | is_ro | is_struct |    result    
+|------------|---------|-------------|-------------------------------|-------------------------|--------|-------|-----------|--------------
+|func_args   | rpc     | func_args   | Описание аргументов процедуры | {"a_code": "func_args"} | t      | t     | t         | 
+|func_result | rpc     | func_result | Описание результата процедуры | {"a_code": "func_args"} | t      | t     | t         | 
+|index       | rpc     | index       | Список описаний процедур      |                         | t      | t     | t         | rpc.func_def
 
 ## rpc/90_test
 
@@ -23,7 +23,7 @@ SELECT * FROM rpc.index('rpc')
 SELECT * FROM rpc.func_args('func_args')
 ;
 ```
-| arg   | type | required | def_val |     anno      
+| code  | type | required | def_val |     anno      
 |-------|------|----------|---------|---------------
 |a_code | text | t        |         | Имя процедуры
 
@@ -36,12 +36,23 @@ SELECT * FROM rpc.func_args('func_args')
 SELECT * FROM rpc.func_result('func_args')
 ;
 ```
-|  arg    |  type   |         anno          
+|  code   |  type   |         anno          
 |---------|---------|-----------------------
-|         | TABLE   | 
-|arg      | text    | Имя аргумента
+|code     | text    | Имя аргумента
 |type     | text    | Тип аргумента
 |required | boolean | Значение обязательно
 |def_val  | text    | Значение по умолчанию
 |anno     | text    | Описание
+
+## rpc/90_test
+
+```sql
+/*
+  Тест func_result
+*/
+SELECT * FROM rpc.func_result('index')
+;
+```
+|code | type | anno 
+|-----|------|------
 
