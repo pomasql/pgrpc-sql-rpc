@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS func_anno(
   code      TEXT PRIMARY KEY
 , nspname   NAME NOT NULL
 , proname   NAME NOT NULL
-, anno      TEXT
 , sample    TEXT
 );
 COMMENT ON TABLE func_anno IS 'Function annotation';

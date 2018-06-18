@@ -73,7 +73,7 @@ $_$
     RETURN;
   END;
 $_$;
-COMMENT ON FUNCTION pg_func_args(TEXT, TEXT) IS 'Function arguments definition';
+SELECT poma.comment('f', 'pg_func_args', 'Function arguments definition');
 
 -- -----------------------------------------------------------------------------
 

@@ -29,10 +29,13 @@ SET SEARCH_PATH FROM CURRENT AS
 $_$
   BEGIN
     DELETE FROM func_anno WHERE code = a_code;
+    IF a_anno IS NOT NULL THEN
+      PERFORM poma.comment('f', a_nspname || '.' || a_proname, a_anno);
+    END IF;
     INSERT INTO func_anno (
-        code,   nspname,   proname,   anno,   sample
+        code,   nspname,   proname,   sample
     ) VALUES (
-      a_code, a_nspname, a_proname, a_anno, a_sample
+      a_code, a_nspname, a_proname, a_sample
     );
     INSERT INTO func_arg_anno (
        func_code, is_in, code,  anno
@@ -47,7 +50,7 @@ $_$
   RETURN a_code;
 END;
 $_$;
-COMMENT ON FUNCTION method(TEXT, TEXT, TEXT, TEXT, JSON, JSON, TEXT) IS 'Register RPC method';
+SELECT poma.comment('f', 'method', 'Register RPC method');
 
 -- -----------------------------------------------------------------------------
 
@@ -57,10 +60,9 @@ CREATE OR REPLACE FUNCTION add(
 , a_args    JSON DEFAULT NULL
 , a_result  JSON DEFAULT NULL
 , a_sample  TEXT DEFAULT NULL
-) RETURNS TEXT VOLATILE LANGUAGE 'sql'
-SET SEARCH_PATH FROM CURRENT AS
+) RETURNS TEXT VOLATILE LANGUAGE 'sql' AS
 $_$
-  SELECT method($1, current_schema(), $1, $2, $3, $4, $5)
+  SELECT rpc.method($1, current_schema(), $1, $2, $3, $4, $5)
 $_$;
 COMMENT ON FUNCTION add(TEXT, TEXT, JSON, JSON, TEXT) IS 'Register RPC method with the same name as internal func';
 

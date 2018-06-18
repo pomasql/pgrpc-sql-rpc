@@ -8,11 +8,11 @@
 SELECT * FROM rpc.index('rpc')
 ;
 ```
-|   code     | nspname |   proname   |             anno              |         sample          | is_set | is_ro | is_struct |    result    
-|------------|---------|-------------|-------------------------------|-------------------------|--------|-------|-----------|--------------
-|func_args   | rpc     | func_args   | Описание аргументов процедуры | {"a_code": "func_args"} | t      | t     | t         | 
-|func_result | rpc     | func_result | Описание результата процедуры | {"a_code": "func_args"} | t      | t     | t         | 
-|index       | rpc     | index       | Список описаний процедур      |                         | t      | t     | t         | rpc.func_def
+|   code     | nspname |   proname   | is_set | is_ro | is_struct |    result    |             anno              |         sample          
+|------------|---------|-------------|--------|-------|-----------|--------------|-------------------------------|-------------------------
+|func_args   | rpc     | func_args   | t      | t     | t         |              | Описание аргументов процедуры | {"a_code": "func_args"}
+|func_result | rpc     | func_result | t      | t     | t         |              | Описание результата процедуры | {"a_code": "func_args"}
+|index       | rpc     | index       | t      | t     | t         | rpc.func_def | Список описаний процедур      | 
 
 ## rpc/90_test
 
