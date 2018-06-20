@@ -53,6 +53,15 @@ SELECT * FROM rpc.func_result('func_args')
 SELECT * FROM rpc.func_result('index')
 ;
 ```
-|code | type | anno 
-|-----|------|------
+|  code    |  type   |             anno              
+|----------|---------|-------------------------------
+|code      | text    | Имя процедуры
+|nspname   | name    | Имя схемы хранимой функции
+|proname   | name    | Имя хранимой функции
+|is_set    | boolean | Метод возвращает 0..N строк
+|is_ro     | boolean | Метод Read-only
+|is_struct | boolean | Результат является структурой
+|result    | text    | Имя типа результата
+|anno      | text    | Описание
+|sample    | text    | Пример вызова
 
