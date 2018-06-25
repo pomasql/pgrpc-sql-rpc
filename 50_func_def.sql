@@ -117,5 +117,4 @@ $_$
     RETURN;
   END;
 $_$;
-
-COMMENT ON FUNCTION pg_func_result(TEXT, TEXT) IS 'Function result definition';
+SELECT poma.comment('f', 'pg_func_result', 'Function result definition');
