@@ -77,44 +77,64 @@ SELECT poma.comment('f', 'pg_func_args', 'Function arguments definition');
 
 -- -----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION pg_func_result(a_nspname TEXT, a_proname TEXT) RETURNS TABLE(code TEXT, type TEXT) STABLE LANGUAGE 'plpgsql' AS
+CREATE OR REPLACE FUNCTION pg_func_result(
+  a_nspname TEXT
+, a_proname TEXT
+) RETURNS TABLE(
+  code     TEXT
+, type     TEXT
+, comment  TEXT
+) STABLE LANGUAGE 'plpgsql' AS
 $_$
   DECLARE
-    v_is_set     BOOL;
-    v_ret        TEXT;
+    v_is_struct  BOOL;
+    v_res_type   TEXT;
+    v_res_def    TEXT;
     v_defs       TEXT[];
     v_i          INTEGER;
   BEGIN
-    SELECT INTO v_is_set, v_ret
-      p.proretset, pg_get_function_result(p.oid)
-      FROM pg_catalog.pg_proc p
-      JOIN pg_namespace n ON (n.oid = p.pronamespace)
-     WHERE n.nspname = a_nspname
-       AND p.proname = a_proname
+    SELECT INTO v_is_struct, v_res_type, v_res_def
+      (format_type(p.prorettype, NULL) = 'record' OR t.typtype = 'c')
+    , NULLIF(rpc.pg_type_name(p.prorettype), 'record')
+    , pg_get_function_result(p.oid)
+    FROM pg_catalog.pg_proc p
+      LEFT JOIN pg_type t ON (t.oid = p.prorettype)
+      WHERE p.pronamespace = to_regnamespace(a_nspname)
+        AND p.proname = a_proname
     ;
-
-    IF v_ret = '' THEN
+    IF v_res_def = '' THEN
       -- function has no results (VOID)
       RETURN;
-    END IF;
-    RAISE DEBUG 'result1: % (%)',v_ret,v_is_set;
-    IF v_is_set THEN
-      IF left(v_ret, 6) = 'TABLE(' THEN
-        -- anon table
-        v_ret := regexp_replace(v_ret,'(TABLE\()(.+)\)',E'\\2','i');
-        v_defs := regexp_split_to_array(v_ret, E',\\s+');
-        FOR v_i IN 1 .. pg_catalog.array_upper(v_defs, 1) LOOP
-            RETURN QUERY SELECT split_part(v_defs[v_i], ' ', 1), split_part(v_defs[v_i], ' ', 2);
-        END LOOP;
-        RETURN;
-      END IF;
-      -- Always: ELSIF left(v_ret, 6) = 'SETOF ' THEN
-      v_ret := split_part(v_ret, ' ', 2);
+    ELSIF NOT v_is_struct THEN
+      -- function returns scalar type
+      RETURN;
     END IF;
 
-    -- TODO: return fields if v_ret is a complex type
-
+    IF v_res_type IS NULL THEN
+      -- anon table, left(v_res_def, 6) = 'TABLE('
+      v_res_def := regexp_replace(v_res_def,'(TABLE\()(.+)\)',E'\\2','i');
+      RETURN QUERY SELECT
+        split_part(dt, ' ', 1)
+      , split_part(dt, ' ', 2)
+      , NULL::TEXT
+        FROM regexp_split_to_table(v_res_def, E',\\s+') dt
+      ;
+    ELSE
+      -- Always: ELSIF left(v_res_def, 6) = 'SETOF ' THEN
+      RETURN QUERY SELECT
+        attname::TEXT
+      , CASE WHEN t.typtype ='e' THEN 'text'
+        ELSE rpc.pg_type_name(CASE WHEN t.typtype ='d' THEN t.typbasetype ELSE atttypid END) END
+      , col_description(attrelid, attnum) AS anno
+        FROM pg_catalog.pg_attribute a
+        LEFT JOIN pg_type t ON (t.oid = a.atttypid)
+       WHERE attrelid = v_res_type::regclass
+         AND attnum > 0
+         AND NOT attisdropped
+       ORDER BY attnum
+      ;
+    END IF;
     RETURN;
   END;
 $_$;
-SELECT poma.comment('f', 'pg_func_result', 'Function result definition');
+SELECT poma.comment('f', 'pg_func_result', 'Function result of complex type columns definition');
