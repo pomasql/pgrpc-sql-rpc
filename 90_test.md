@@ -1,5 +1,5 @@
 #  rpc/90_test
-## rpc/90_test
+## index
 
 ```sql
 /*
@@ -14,7 +14,7 @@ SELECT * FROM rpc.index('rpc')
 |func_result | rpc     | func_result | t      | t     | t         |              | Описание результата процедуры | {"a_code": "func_args"}
 |index       | rpc     | index       | t      | t     | t         | rpc.func_def | Список описаний процедур      | 
 
-## rpc/90_test
+## func_args
 
 ```sql
 /*
@@ -27,7 +27,7 @@ SELECT * FROM rpc.func_args('func_args')
 |-------|------|----------|---------|---------------
 |a_code | text | t        |         | Имя процедуры
 
-## rpc/90_test
+## func_result
 
 ```sql
 /*
@@ -44,7 +44,7 @@ SELECT * FROM rpc.func_result('func_args')
 |def_val  | text    | Значение по умолчанию
 |anno     | text    | Описание
 
-## rpc/90_test
+## index_result
 
 ```sql
 /*
