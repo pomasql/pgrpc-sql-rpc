@@ -6,7 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION pg_func_args(a_nspname TEXT, a_proname TEXT)
-  RETURNS TABLE(code TEXT, type TEXT, id INT, required BOOL, def_val TEXT) STABLE LANGUAGE 'plpgsql' AS
+  RETURNS TABLE(arg TEXT, type TEXT, id INT, required BOOL, def_val TEXT) STABLE LANGUAGE 'plpgsql' AS
 $_$
   -- a_code:  название функции
   DECLARE
@@ -81,7 +81,7 @@ CREATE OR REPLACE FUNCTION pg_func_result(
   a_nspname TEXT
 , a_proname TEXT
 ) RETURNS TABLE(
-  code     TEXT
+  arg     TEXT
 , type     TEXT
 , comment  TEXT
 ) STABLE LANGUAGE 'plpgsql' AS
