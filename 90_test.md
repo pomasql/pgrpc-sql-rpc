@@ -8,11 +8,11 @@
 SELECT * FROM rpc.index('rpc')
 ;
 ```
-|   code     | nspname |   proname   | is_set | is_ro | is_struct |    result    |             anno              |         sample          
-|------------|---------|-------------|--------|-------|-----------|--------------|-------------------------------|-------------------------
-|func_args   | rpc     | func_args   | t      | t     | t         |              | Описание аргументов процедуры | {"a_code": "func_args"}
-|func_result | rpc     | func_result | t      | t     | t         |              | Описание результата процедуры | {"a_code": "func_args"}
-|index       | rpc     | index       | t      | t     | t         | rpc.func_def | Список описаний процедур      | 
+|   code     | nspname |   proname   | permit_code | max_age |             anno              |         sample          | is_ro 
+|------------|---------|-------------|-------------|---------|-------------------------------|-------------------------|-------
+|func_args   | rpc     | func_args   |             |      -1 | Описание аргументов процедуры | {"a_code": "func_args"} | t
+|func_result | rpc     | func_result |             |      -1 | Описание результата процедуры | {"a_code": "func_args"} | t
+|index       | rpc     | index       |             |      -1 | Список описаний процедур      | {"a_nsp":"rpc"}         | t
 
 ## func_args
 
@@ -23,7 +23,7 @@ SELECT * FROM rpc.index('rpc')
 SELECT * FROM rpc.func_args('func_args')
 ;
 ```
-| code  | type | required | def_val |     anno      
+| arg   | type | required | def_val |     anno      
 |-------|------|----------|---------|---------------
 |a_code | text | t        |         | Имя процедуры
 
@@ -36,9 +36,9 @@ SELECT * FROM rpc.func_args('func_args')
 SELECT * FROM rpc.func_result('func_args')
 ;
 ```
-|  code   |  type   |         anno          
+|  arg    |  type   |         anno          
 |---------|---------|-----------------------
-|code     | text    | Имя аргумента
+|arg      | text    | Имя аргумента
 |type     | text    | Тип аргумента
 |required | boolean | Значение обязательно
 |def_val  | text    | Значение по умолчанию
@@ -53,15 +53,14 @@ SELECT * FROM rpc.func_result('func_args')
 SELECT * FROM rpc.func_result('index')
 ;
 ```
-|  code    |  type   |             anno              
-|----------|---------|-------------------------------
-|code      | text    | Имя процедуры
-|nspname   | name    | Имя схемы хранимой функции
-|proname   | name    | Имя хранимой функции
-|is_set    | boolean | Метод возвращает 0..N строк
-|is_ro     | boolean | Метод Read-only
-|is_struct | boolean | Результат является структурой
-|result    | text    | Имя типа результата
-|anno      | text    | Описание
-|sample    | text    | Пример вызова
+|    arg     |  type   |             anno             
+|------------|---------|------------------------------
+|code        | text    | Имя процедуры
+|nspname     | text    | Имя схемы хранимой процедуры
+|proname     | text    | Имя хранимой функции
+|permit_code | text    | Код разрешения
+|max_age     | integer | Время хранения в кэше(сек)
+|anno        | text    | Описание
+|sample      | text    | Пример вызова
+|is_ro       | boolean | Метод Read-only
 
