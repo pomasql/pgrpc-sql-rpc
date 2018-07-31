@@ -35,7 +35,8 @@ CREATE OR REPLACE FUNCTION index(a_nsp TEXT DEFAULT NULL) RETURNS TABLE (
 , anno        TEXT
 , sample      TEXT
 , is_ro       BOOL
-) STABLE LANGUAGE 'sql' AS
+) STABLE LANGUAGE 'sql'
+SET SEARCH_PATH FROM CURRENT AS
 $_$
   SELECT 
     r.code
