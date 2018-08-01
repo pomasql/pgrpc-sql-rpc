@@ -18,6 +18,7 @@ $_$
     v_type       TEXT;
     v_default    TEXT;
     v_required   BOOL;
+    v_offset     INTEGER;
   BEGIN
     SELECT INTO v_args
       pg_get_function_arguments(p.oid)
@@ -53,7 +54,11 @@ $_$
       END IF;
 
       v_required := FALSE;
-      IF split_part(v_def, ' ', 4) = 'DEFAULT' THEN
+      v_offset := 4;
+      IF v_def ~ '^.+ timestamp with time zone ' THEN
+        v_offset := 7;
+      END IF;
+      IF split_part(v_def, ' ', v_offset) = 'DEFAULT' THEN
         v_default := substr(v_def, strpos(v_def, ' DEFAULT ') + 9);
         v_default := regexp_replace(v_default, '::[^:]+$', '');
         IF v_default = 'NULL' THEN
