@@ -6,6 +6,7 @@
   Тест index
 */
 SELECT * FROM rpc.index('rpc')
+ORDER BY code ASC
 ;
 ```
 |   code     | nspname |   proname   | permit_code | max_age |             anno              |         sample          | is_ro 
@@ -21,6 +22,7 @@ SELECT * FROM rpc.index('rpc')
   Тест func_args
 */
 SELECT * FROM rpc.func_args('func_args')
+ORDER BY arg ASC
 ;
 ```
 | arg   | type | required | def_val |     anno      
@@ -34,15 +36,16 @@ SELECT * FROM rpc.func_args('func_args')
   Тест func_result
 */
 SELECT * FROM rpc.func_result('func_args')
+ORDER BY arg ASC
 ;
 ```
 |  arg    |  type   |         anno          
 |---------|---------|-----------------------
-|arg      | text    | Имя аргумента
-|type     | text    | Тип аргумента
-|required | boolean | Значение обязательно
-|def_val  | text    | Значение по умолчанию
 |anno     | text    | Описание
+|arg      | text    | Имя аргумента
+|def_val  | text    | Значение по умолчанию
+|required | boolean | Значение обязательно
+|type     | text    | Тип аргумента
 
 ## index_result
 
@@ -51,16 +54,17 @@ SELECT * FROM rpc.func_result('func_args')
   Тест func_result
 */
 SELECT * FROM rpc.func_result('index')
+ORDER BY arg ASC
 ;
 ```
 |    arg     |  type   |             anno             
 |------------|---------|------------------------------
-|code        | text    | Имя процедуры
-|nspname     | text    | Имя схемы хранимой процедуры
-|proname     | text    | Имя хранимой функции
-|permit_code | text    | Код разрешения
-|max_age     | integer | Время хранения в кэше(сек)
 |anno        | text    | Описание
-|sample      | text    | Пример вызова
+|code        | text    | Имя процедуры
 |is_ro       | boolean | Метод Read-only
+|max_age     | integer | Время хранения в кэше(сек)
+|nspname     | text    | Имя схемы хранимой процедуры
+|permit_code | text    | Код разрешения
+|proname     | text    | Имя хранимой функции
+|sample      | text    | Пример вызова
 
