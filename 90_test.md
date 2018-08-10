@@ -5,8 +5,7 @@
 /*
   Тест index
 */
-SELECT * FROM rpc.index('rpc')
-ORDER BY code ASC
+SELECT * FROM rpc.index('rpc') ORDER BY code
 ;
 ```
 |   code     | nspname |   proname   | permit_code | max_age |             anno              |         sample          | is_ro 
@@ -22,7 +21,6 @@ ORDER BY code ASC
   Тест func_args
 */
 SELECT * FROM rpc.func_args('func_args')
-ORDER BY arg ASC
 ;
 ```
 | arg   | type | required | def_val |     anno      
@@ -35,8 +33,7 @@ ORDER BY arg ASC
 /*
   Тест func_result
 */
-SELECT * FROM rpc.func_result('func_args')
-ORDER BY arg ASC
+SELECT * FROM rpc.func_result('func_args') ORDER BY arg
 ;
 ```
 |  arg    |  type   |         anno          
@@ -53,8 +50,7 @@ ORDER BY arg ASC
 /*
   Тест func_result
 */
-SELECT * FROM rpc.func_result('index')
-ORDER BY arg ASC
+SELECT * FROM rpc.func_result('index') ORDER BY arg
 ;
 ```
 |    arg     |  type   |             anno             
