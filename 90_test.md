@@ -44,13 +44,3 @@ SELECT * FROM rpc.func_result('func_args') ORDER BY arg
 |required | boolean | Значение обязательно
 |type     | text    | Тип аргумента
 
-## index_result
-
-```sql
-/*
-  Тест func_result
-  метод rpc.index может отсутствовать, если переназначен в другом пакете
-*/
-
-;
-```

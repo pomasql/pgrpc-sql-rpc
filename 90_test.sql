@@ -23,11 +23,3 @@ SELECT poma.test('func_result'); -- BOT
   Тест func_result
 */
 SELECT * FROM rpc.func_result('func_args') ORDER BY arg; -- EOT
-
--- -----------------------------------------------------------------------------
-SELECT poma.test('index_result'); -- BOT
-/*
-  Тест func_result
-  метод rpc.index может отсутствовать, если переназначен в другом пакете
-*/
--- SELECT * FROM rpc.func_result('index') ORDER BY arg; -- EOT
