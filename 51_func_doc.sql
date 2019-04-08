@@ -6,13 +6,13 @@
 
 -- -----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION index(a_nsp TEXT DEFAULT NULL) RETURNS SETOF func_def
+CREATE OR REPLACE FUNCTION index(a_nsp TEXT[] DEFAULT NULL) RETURNS SETOF func_def
   STABLE LANGUAGE 'sql'
 SET SEARCH_PATH FROM CURRENT AS
 $_$
   SELECT *
     FROM func_def
-    WHERE a_nsp IS NULL OR nspname = a_nsp
+    WHERE a_nsp IS NULL OR array_length(a_nsp, 1) = 0 OR nspname = ANY(a_nsp)
     ORDER BY code
 $_$;
 
