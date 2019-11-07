@@ -8,7 +8,7 @@ SELECT poma.test('index'); -- BOT
   Тест index
   метод rpc.index может отсутствовать, если переназначен в другом пакете
 */
-SELECT * FROM rpc.index(:'PKG') WHERE code <> 'index' ORDER BY code; -- EOT
+SELECT * FROM rpc.index(ARRAY[:'PKG']) WHERE code <> 'index' ORDER BY code; -- EOT
 
 -- -----------------------------------------------------------------------------
 SELECT poma.test('func_args'); -- BOT

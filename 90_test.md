@@ -6,7 +6,7 @@
   Тест index
   метод rpc.index может отсутствовать, если переназначен в другом пакете
 */
-SELECT * FROM rpc.index('rpc') WHERE code <> 'index' ORDER BY code
+SELECT * FROM rpc.index(ARRAY['rpc']) WHERE code <> 'index' ORDER BY code
 ;
 ```
 |   code     | nspname |   proname   | is_set | is_ro | is_struct | result |             anno              |         sample          
